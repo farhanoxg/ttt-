@@ -1,0 +1,129 @@
+/* Styles for the game container */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    margin: 0;
+}
+
+.gameContainer {
+    text-align: center;
+    margin-top: 3rem;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+/* Styles for the cell container (grid layout) */
+#cellContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(3, 80px);
+    grid-gap: 5px;
+    justify-content: center;
+    margin-top: 20px;
+    width: fit-content;
+    margin: auto;
+}
+
+/* Styles for individual cells */
+.cell {
+    width: 80px;
+    height: 80px;
+    background-color: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 36px;
+    font-weight: bold;
+    cursor: pointer;
+    border: 2px solid #ccc;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Hover effect for cells */
+.cell:hover {
+    /* background-color: #ccc; */
+}
+
+/* Styles for the score container */
+.score {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    width: 248px;
+    margin: auto;
+    color: white;
+    margin-bottom: 1rem;
+    font-size: 18px;
+}
+
+/* Styles for player 1's score element */
+.score .p1 {
+    background-color: #4672c4;
+}
+
+/* Styles for player 2's score element */
+.score .p2 {
+    background-color: #dc4242;
+}
+
+/* Styles for buttons container */
+.button {
+    display: flex;
+    justify-content: space-around;
+    width: 225px;
+    margin: auto;
+}
+
+/* Styles for buttons */
+button {
+    height: 30px;
+    width: calc(100% / 2 - 15px);
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+    text-transform: capitalize;
+    cursor: pointer;
+}
+
+/* Styles for the active state of buttons */
+button:active {
+    transform: scale(0.95);
+}
+
+/* Styles for the restart button */
+#restartBtn {
+    background: rgb(71, 67, 67);
+}
+
+/* Styles for the reset button */
+#resetBtn {
+    background: rgb(188, 54, 54);
+}
+
+/* Styles for the blinking animation */
+.winning-cell span.blink {
+    animation: blink 0.4s 3 alternate, scaleUp 0.4s 3 alternate;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes scaleUp {
+    0% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1.4);
+    }
+}

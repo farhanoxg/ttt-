@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="home.css">
+    <title>TIC TAC TOE</title>
+</head>
+
+<body>
+    <div class="container">
+        <button class="pVc" onclick="redirectToPvC()">Player vs computer</button>
+        <button class="pVp" onclick="redirectToPvP()">Player vs player</button>
+    </div>
+
+    <audio id="clickSound" src="sound/BtnClick.mp3" preload="auto"></audio>
+
+    <script>
+        function redirectToPvC() {
+            playClickSound();
+
+            setTimeout(function () {
+                window.location.href = 'pvc';
+            }, 600);
+        }
+
+        function redirectToPvP() {
+            playClickSound();
+
+            setTimeout(function () {
+                window.location.href = 'pvp';
+            }, 600);
+        }
+
+        function playClickSound() {
+            var clickSound = document.getElementById("clickSound");
+            clickSound.play();
+        }
+    </script>
+</body>
+
+</html>

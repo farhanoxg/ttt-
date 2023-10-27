@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TIC TAC TOE</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+    <div class="gameContainer">
+        <h1>Tic Tac Toe</h1>
+        <div class="score"></div>
+        <div class="gridContainer">
+            <audio id="clickSound" src="sound/click.mp3"></audio>
+            <audio id="WinSound" src="sound/win.mp3"></audio>
+
+            <div id="cellContainer">
+                <div cellIndex="0" class="cell  bt-0"> <span id="span"></span></div>
+                <div cellIndex="1" class="cell  bt-1"> <span id="span"></span></div>
+                <div cellIndex="2" class="cell  bt-2"> <span id="span"></span></div>
+                <div cellIndex="3" class="cell  bt-3"> <span id="span"></span></div>
+                <div cellIndex="4" class="cell  bt-4"> <span id="span"></span></div>
+                <div cellIndex="5" class="cell  bt-5"> <span id="span"></span></div>
+                <div cellIndex="6" class="cell  bt-6"> <span id="span"></span></div>
+                <div cellIndex="7" class="cell  bt-7"> <span id="span"></span></div>
+                <div cellIndex="8" class="cell  bt-8"> <span id="span"></span></div>
+            </div>
+        </div>
+        <h2 id="statusText"></h2>
+        <div class="button">
+            <button id="restartBtn">Restart</button>
+            <button id="resetBtn" onclick="resetGame()">Reset</button>
+        </div>
+    </div>
+    <script>
+        // Selecting DOM elements
+        const cells = document.querySelectorAll('.cell');
+        const statusText = document.querySelector('#statusText');
+        const restartBtn = document.querySelector('#restartBtn');
+        const score = document.querySelector('.score');
+        const spans = document.querySelector('#span');
+        const clickSound = document.getElementById('clickSound');
+        const WinSound = document.getElementById('WinSound');
+
+        // Variable to track the last winning player
+        let lastWinner = null;
+
+        // Array of winning conditions
+        const winConditions = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ];
+
+        function playWinSound() {
+            WinSound.play();
+        }
+
+        let isProcessingClick = false;
+
+        // Scoreboard for players X and O
+        const scoreboard = {
+            X: 0,
+            O: 0
+        };
+
+        // Array to track the state of each cell
+        let options = ['', '', '', '', '', '', '', '', ''];
+
+        // Current player ('X' or 'O')
+        let currentPlayer = 'X';
+
+        // Variable to track whether the game is running
+        let running = false;
+
+        // Initialize the game
+        initializeGame();
+
+        // Function to initialize the game
+        function initializeGame() {
+            // Add click event listeners to each cell
+            cells.forEach(cell => cell.addEventListener('click', cellClicked));
+
+            // Add click event listener to restart button
+            restartBtn.addEventListener('click', restartGame);
+
+            // Update the score display
+            updateScoreDisplay();
+
+            // Set initial status text
+            statusText.textContent = `${currentPlayer}'s turn`;
+
+            // Set the game to running
+            running = true;
+        }
+
+
+        // Function called when a cell is clicked
+        function cellClicked() {
+            if (isProcessingClick) {
+                return;
+            }
+
+            const cellIndex = this.getAttribute('cellIndex');
+
+            if (options[cellIndex] !== '' || !running) {
+                return;
+            }
+
+            isProcessingClick = true;
+
+            clickSound.play();
+
+            updateCell(this, cellIndex);
+            checkWinner();
+
+            setTimeout(() => {
+                isProcessingClick = false;
+                makeComputerMove(); // Call the computer's move after a short delay
+            }, 500);
+        }
+
+        // Function to update a cell with the current player's symbol
+        function updateCell(cell, index) {
+            options[index] = currentPlayer;
+            const spanElement = cell.querySelector('span');
+            spanElement.textContent = currentPlayer;
+
+            // Set the color of the symbol based on the current player
+            if (currentPlayer === 'X') {
+                spanElement.style.color = '#4672c4';
+            } else if (currentPlayer === 'O') {
+                spanElement.style.color = '#dc4242';
+            }
+        }
+
+        // Function to switch to the other player
+        function changePlayer() {
+            currentPlayer = (currentPlayer === 'X') ? 'O' : 'X';
+            statusText.textContent = `${currentPlayer}'s turn`;
+        }
+
+        // Function to check if there's a winner
+        function checkWinner() {
+            let roundWon = false;
+
+            for (let i = 0; i < winConditions.length; i++) {
+                const condition = winConditions[i];
+                const cellA = options[condition[0]];
+                const cellB = options[condition[1]];
+                const cellC = options[condition[2]];
+
+                if (cellA === '' || cellB === '' || cellC === '') {
+                    continue;
+                }
+
+                if (cellA === cellB && cellB === cellC) {
+                    roundWon = true;
+                    setTimeout(playWinSound, 100);
+
+                    cells[condition[0]].querySelector('span').classList.add('blink');
+                    cells[condition[1]].querySelector('span').classList.add('blink');
+                    cells[condition[2]].querySelector('span').classList.add('blink');
+                    lastWinner = currentPlayer;
+                    break;
+                }
+            }
+
+            if (roundWon) {
+                statusText.textContent = `${currentPlayer} WON! ✌️`;
+                running = false;
+
+                for (let i = 0; i < winConditions.length; i++) {
+                    const condition = winConditions[i];
+                    const cellA = options[condition[0]];
+                    const cellB = options[condition[1]];
+                    const cellC = options[condition[2]];
+
+                    if (cellA === currentPlayer && !cells[condition[0]].classList.contains('winning-cell')) {
+                        cells[condition[0]].classList.add('winning-cell');
+                    }
+                    if (cellB === currentPlayer && !cells[condition[1]].classList.contains('winning-cell')) {
+                        cells[condition[1]].classList.add('winning-cell');
+                    }
+                    if (cellC === currentPlayer && !cells[condition[2]].classList.contains('winning-cell')) {
+                        cells[condition[2]].classList.add('winning-cell');
+                    }
+                }
+
+                cells.forEach(cell => cell.classList.add('disabled'));
+
+                scoreboard[currentPlayer]++;
+                updateScoreDisplay();
+            } else if (!options.includes('')) {
+                statusText.textContent = `Draw!`;
+                running = false;
+            } else {
+                changePlayer();
+            }
+        }
+
+        // Function to restart the game
+        function restartGame() {
+            if (lastWinner === 'X' || lastWinner === null) {
+                currentPlayer = 'X';
+            } else {
+                currentPlayer = 'O';
+            }
+
+            options = ['', '', '', '', '', '', '', '', ''];
+            statusText.textContent = `${currentPlayer}'s turn`;
+            cells.forEach(cell => cell.classList.remove('winning-cell'));
+
+            cells.forEach(cell => {
+                const spanElement = cell.querySelector('span');
+                if (spanElement) {
+                    spanElement.textContent = '';
+                }
+            });
+
+            cells.forEach(cell => cell.classList.remove('disabled'));
+            running = true;
+
+            // Check if the current player is 'O' (computer), and if so, make a move for the computer
+            setTimeout(() => {
+                if (currentPlayer === 'O') {
+                    makeComputerMove();
+                }
+            }, 500);
+        }
+
+        // Function to make a random move for the computer player
+        function makeComputerMove() {
+            if (currentPlayer === 'O' && running) {
+                const bestMove = minimax(options, currentPlayer);
+                const cell = cells[bestMove.index];
+                if (cell && options[bestMove.index] === '') {
+                    cell.click(); // Simulate a click on the cell
+                }
+            }
+        }
+        // Function to make the computer's move using the minimax algorithm
+        function minimax(newOptions, player) {
+            // Base cases: check for a win, loss, or draw
+            if (checkWin(newOptions, 'O')) {
+                return { score: 1 };
+            } else if (checkWin(newOptions, 'X')) {
+                return { score: -1 };
+            } else if (!newOptions.includes('')) {
+                return { score: 0 };
+            }
+
+            const moves = [];
+
+            // Loop through available moves
+            for (let i = 0; i < newOptions.length; i++) {
+                if (newOptions[i] === '') {
+                    const move = {};
+                    move.index = i;
+                    newOptions[i] = player;
+
+                    // Recursively get the score for the opponent
+                    const result = minimax(newOptions, player === 'O' ? 'X' : 'O');
+                    move.score = result.score;
+                    newOptions[i] = '';
+
+                    moves.push(move);
+                }
+            }
+
+            // Find the best move
+            let bestMoves = [];
+            let bestScore;
+            if (player === 'O') {
+                bestScore = -Infinity;
+                for (let i = 0; i < moves.length; i++) {
+                    if (moves[i].score > bestScore) {
+                        bestScore = moves[i].score;
+                        bestMoves = [i];
+                    } else if (moves[i].score === bestScore) {
+                        bestMoves.push(i);
+                    }
+                }
+            } else {
+                bestScore = Infinity;
+                for (let i = 0; i < moves.length; i++) {
+                    if (moves[i].score < bestScore) {
+                        bestScore = moves[i].score;
+                        bestMoves = [i];
+                    } else if (moves[i].score === bestScore) {
+                        bestMoves.push(i);
+                    }
+                }
+            }
+
+            // Randomly select one of the best moves
+
+            const shuffledMoves = shuffleArray(bestMoves);
+            const randomIndex = Math.floor(Math.random() * shuffledMoves.length);
+            return moves[shuffledMoves[randomIndex]];
+        }
+
+        // Function to shuffle an array using Fisher-Yates algorithm
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Function to check for a win for the specified player
+        function checkWin(newOptions, player) {
+            for (let i = 0; i < winConditions.length; i++) {
+                const condition = winConditions[i];
+                const [a, b, c] = condition;
+                if (newOptions[a] === player && newOptions[b] === player && newOptions[c] === player) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Function to update the score display
+        function updateScoreDisplay() {
+            score.textContent = `player: ${scoreboard.X}  computer: ${scoreboard.O}`;
+            const p1Element = document.createElement('span');
+            p1Element.textContent = `player: ${scoreboard.X}`;
+            p1Element.classList.add('p1');
+
+            const p2Element = document.createElement('span');
+            p2Element.textContent = `computer: ${scoreboard.O}`;
+            p2Element.classList.add('p2');
+
+            // Clear existing score elements
+            while (score.firstChild) {
+                score.removeChild(score.firstChild);
+            }
+
+            // Append the new score elements
+            score.appendChild(p1Element);
+            score.appendChild(p2Element);
+        }
+
+        // Function to reset the game
+        function resetGame() {
+            location.reload();
+        }
+    </script>
+</body>
+
+</html>

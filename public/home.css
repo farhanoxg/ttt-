@@ -1,0 +1,63 @@
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Style the body with a background color and center the content */
+body {
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Style the container for the buttons */
+.container {
+    text-align: center;
+}
+
+/* Style the buttons */
+button {
+    background-color: #4672c4;
+    color: #fff;
+    font-size: 18px;
+    padding: 12px 24px;
+    margin: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s, background-color 0.1s; /* Add delay for background-color */
+}
+
+/* Add a 3D effect to the buttons on hover */
+
+
+/* Style the links within the buttons */
+a {
+    text-decoration: none;
+    color: #fff;
+}
+
+/* Center the buttons horizontally */
+.pVc, .pVp {
+    display: inline-block;
+}
+
+/* Add a 3D effect to the buttons when clicked */
+button:active {
+    transform: translateY(5px);
+    box-shadow: 5px 2px 4px rgba(0, 0, 0, 0.3);
+    transition-delay: 5s; /* Delay the transition effect for the active state */
+}
+
+/* Style the buttons as block elements on smaller screens */
+@media (max-width: 768px) {
+    button {
+        display: block;
+        width: 80%;
+        margin: 10px auto;
+    }
+}
