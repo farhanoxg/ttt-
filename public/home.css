@@ -17,6 +17,7 @@ body {
 /* Style the container for the buttons */
 .container {
     text-align: center;
+    margin-top: 50px; 
 }
 
 /* Style the buttons */
@@ -31,9 +32,6 @@ button {
     cursor: pointer;
     transition: transform 0.2s, box-shadow 0.2s, background-color 0.1s; /* Add delay for background-color */
 }
-
-/* Add a 3D effect to the buttons on hover */
-
 
 /* Style the links within the buttons */
 a {
@@ -50,14 +48,50 @@ a {
 button:active {
     transform: translateY(5px);
     box-shadow: 5px 2px 4px rgba(0, 0, 0, 0.3);
-    transition-delay: 5s; /* Delay the transition effect for the active state */
+    transition-delay: 5s; 
 }
 
+
+.head{
+text-align: center;
+padding: 10px;
+position: fixed;
+top: 40px;
+width: 100%;
+font-family: "Lucida Console", Monaco, monospace;
+font-size: 30px;
+word-spacing: 2px;
+color: #000000;
+font-weight: 700;
+text-decoration:underline;
+}
+
+.foot{
+    text-align: center;
+    padding: 10px;
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 20px;
+word-spacing: 2px;
+color: #000000;
+font-weight: 700;
+font-style: normal;
+
+
+}
 /* Style the buttons as block elements on smaller screens */
 @media (max-width: 768px) {
     button {
         display: block;
         width: 80%;
         margin: 10px auto;
+    }
+    .head{
+        font-size: 25px;
+    }
+    .foot{
+        font-size: 18px;
     }
 }

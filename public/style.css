@@ -5,15 +5,28 @@ body {
     align-items: center;
     min-height: 60vh;
     margin: 0;
+  
 }
 
+#exit{
+    width: fit-content;
+    position: absolute;
+    top: 30px; 
+    left: 18px;
+    font-size: 22px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+}
+#exit.clicked {
+    transform: translateY(50px); /* Adjust the distance of the drop effect */
+}
 .gameContainer {
     text-align: center;
-    margin-top: 3rem;
+    margin-top: 6rem;
     font-family:Arial, Helvetica, sans-serif;
 }
 
-/* Styles for the cell container (grid layout) */
+/* Styles for the cell container */
 #cellContainer {
     display: grid;
     grid-template-columns: repeat(3, 80px);
@@ -40,10 +53,6 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* Hover effect for cells */
-.cell:hover {
-    /* background-color: #ccc; */
-}
 
 /* Styles for the score container */
 .score {

@@ -10,7 +10,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/pvc', (req, res) => {
-    res.render('PvC');
+    res.render('Pvc');
 })
 
 app.get('/pvp', (req, res) => {
